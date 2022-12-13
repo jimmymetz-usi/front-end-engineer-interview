@@ -1,19 +1,25 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
 import PageLoading from '../PageLoading';
+import useHttp from '../../app/useHttp'
 
 function HomePage() {
 	const [loading, setLoading] = useState(true);
-	const [data, setData] = useState([]);
+	//const [data, setData] = useState([]);
+	const data = useHttp('https://jsonplaceholder.typicode.com/users')
 
-	if (loading) {
+
+	/*if (loading) {
 		return <PageLoading />;
-	}
+	}*/
 
 	if (data == null) {
 		return <>An error has occurred</>;
 	}
+
+
+
 
 	/**
 	 * Load user data.
