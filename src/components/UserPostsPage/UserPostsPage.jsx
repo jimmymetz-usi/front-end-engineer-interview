@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Card from 'react-bootstrap/Card';
 import { Link, useParams } from 'react-router-dom';
@@ -16,8 +17,14 @@ function UserPostsPage() {
 	 */
 
 	useEffect(() => {
-		setLoading(false);
-	}, [user, posts]);
+		
+		
+		Promise.all([axios.get(` https://jsonplaceholder.typicode.com/posts?userId=${userId}`),
+		axios.get(` https://jsonplaceholder.typicode.com/users/${userId}`)])
+		.then(res => setPosts(res))
+		.then(res => setUser(res))
+		.then(res => setLoading(false))
+	}, []);
 
 	if (loading) {
 		return <PageLoading />;

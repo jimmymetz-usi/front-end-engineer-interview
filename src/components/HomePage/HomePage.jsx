@@ -1,11 +1,19 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
 import PageLoading from '../PageLoading';
+import axios from 'axios';
 
 function HomePage() {
 	const [loading, setLoading] = useState(true);
 	const [data, setData] = useState([]);
+	useEffect(() => {
+		axios.get('https://jsonplaceholder.typicode.com/users')
+		.then(res => setData(res.data)).then(setLoading(false))
+		
+	}, [])
+	console.log(data)
+	
 
 	if (loading) {
 		return <PageLoading />;
@@ -19,7 +27,8 @@ function HomePage() {
 	 * Load user data.
 	 * Data URL: https://jsonplaceholder.typicode.com/users
 	 */
-
+	
+		
 	return (
 		<>
 			{data.map((user) => (
