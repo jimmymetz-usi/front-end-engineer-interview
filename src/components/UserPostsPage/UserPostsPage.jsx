@@ -5,8 +5,8 @@ import PageLoading from '../PageLoading';
 
 function UserPostsPage() {
 	const [loading, setLoading] = useState(true);
-	const [posts, setPosts] = useState();
-	const [user, setUser] = useState();
+	const [posts, setPosts] = useState([]);
+	const [user, setUser] = useState({});
 	const { userId } = useParams();
 
 	/**
@@ -15,6 +15,38 @@ function UserPostsPage() {
 	 * User URL: https://jsonplaceholder.typicode.com/users/[userId]
 	 */
 
+	/*const getData = async (url) => {
+		const response = await fetch(url);
+		const data = await response.json();
+		return data;
+	}*/
+	/*const getData = (url) => {
+		try {
+			const data = fetch(url).then(response => 
+				 response.json()
+			)
+			return data;
+		} catch (error) {
+			console.log(error);
+		}
+	}*/
+
+	const getDataURL = async () => {
+		const response = await fetch(`https://jsonplaceholder.typicode.com/posts?userId=${userId}`);
+		const data = await response.json()
+		setPosts(data);
+	}
+	const getUserURL = async () => {
+		const response = await fetch(`https://jsonplaceholder.typicode.com/users/${userId}`);
+		const data = await response.json()
+		setUser(data);
+	}
+
+	useEffect(() => {
+		getDataURL();
+		getUserURL();
+	}, [userId])
+	
 	useEffect(() => {
 		setLoading(false);
 	}, [user, posts]);
