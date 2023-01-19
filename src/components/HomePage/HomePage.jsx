@@ -1,51 +1,57 @@
-import { useState } from 'react';
-import Card from 'react-bootstrap/Card';
-import { Link } from 'react-router-dom';
-import PageLoading from '../PageLoading';
+import { useState, useEffect } from "react";
+import Card from "react-bootstrap/Card";
+import { Link } from "react-router-dom";
+import PageLoading from "../PageLoading";
+
+import useHttp from "../../app/useHttp";
 
 function HomePage() {
-	const [loading, setLoading] = useState(true);
-	const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  //const [data, setData] = useState([]);
 
-	if (loading) {
-		return <PageLoading />;
-	}
+  /**
+   * Load user data.
+   * Data URL: https://jsonplaceholder.typicode.com/users
+   */
 
-	if (data == null) {
-		return <>An error has occurred</>;
-	}
+  let data = useHttp("https://jsonplaceholder.typicode.com/users");
 
-	/**
-	 * Load user data.
-	 * Data URL: https://jsonplaceholder.typicode.com/users
-	 */
+  useEffect(() => {
+    if (data) {
+      setLoading(false);
+    }
+  }, [data]);
 
-	return (
-		<>
-			{data.map((user) => (
-				<Card key={user.id} className="mb-2">
-					<Card.Body>
-						<Card.Title>{user.name}</Card.Title>
-						<Card.Subtitle className="text-muted mb-2">
-							{user.email}
-						</Card.Subtitle>
-						<Card.Text
-							style={{ fontSize: '90%' }}
-							className="mb-2"
-							as="div"
-						>
-							<div>{user.address.street}</div>
-							<div>{user.address.suite}</div>
-							<div>
-								{user.address.city} {user.address.zipcode}
-							</div>
-						</Card.Text>
-						<Link to={`/user/${user.id}`}>View Posts</Link>
-					</Card.Body>
-				</Card>
-			))}
-		</>
-	);
+  if (loading) {
+    return <PageLoading />;
+  }
+
+  if (data == null) {
+    return <>An error has occurred</>;
+  }
+
+  return (
+    <>
+      {data.map((user) => (
+        <Card key={user.id} className="mb-2">
+          <Card.Body>
+            <Card.Title>{user.name}</Card.Title>
+            <Card.Subtitle className="text-muted mb-2">
+              {user.email}
+            </Card.Subtitle>
+            <Card.Text style={{ fontSize: "90%" }} className="mb-2" as="div">
+              <div>{user.address.street}</div>
+              <div>{user.address.suite}</div>
+              <div>
+                {user.address.city} {user.address.zipcode}
+              </div>
+            </Card.Text>
+            <Link to={`/user/${user.id}`}>View Posts</Link>
+          </Card.Body>
+        </Card>
+      ))}
+    </>
+  );
 }
 
 export default HomePage;
